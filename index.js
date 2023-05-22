@@ -26,6 +26,11 @@
 
 class Component {
   constructor() {
+    this.state = {
+      task: ["Сделать домашку", "Сделать практику", "Пойти домой"],
+      inputText: "",
+      checked: false,
+    };
   }
 
   getDomNode() {
@@ -47,22 +52,11 @@ class TodoList extends Component {
         createElement("button", { id: "add-btn" }, "+"),
       ]),
       createElement("ul", { id: "todos" }, [
-        createElement("li", {}, [
-          createElement("input", { type: "checkbox" }),
-          createElement("label", {}, "Сделать домашку"),
-          createElement("button", {}, "🗑️")
-        ]),
-        createElement("li", {}, [
-          createElement("input", { type: "checkbox" }),
-          createElement("label", {}, "Сделать практику"),
-          createElement("button", {}, "🗑️")
-        ]),
-        createElement("li", {}, [
-          createElement("input", { type: "checkbox" }),
-          createElement("label", {}, "Пойти домой"),
-          createElement("button", {}, "🗑️")
-        ]),
-      ]),
+        this.state.task.map(el => createElement('li', {}, [
+          createElement("input", {type: "checkbox"}),
+          createElement("label", {}, el),
+          createElement("button", {}, "🗑"),
+      ]))]),
     ]);
   }
 }
