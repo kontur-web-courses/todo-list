@@ -1,4 +1,4 @@
-﻿function createElement(tag, attributes, children) {
+﻿function createElement(tag, attributes, children, callbacks) {
   const element = document.createElement(tag);
 
   if (attributes) {
@@ -21,11 +21,22 @@
     element.appendChild(children);
   }
 
+  if (callbacks) {
+    callbacks.forEach((callback) => {
+      callback(element);
+    })
+  }
+
   return element;
 }
 
 class Component {
   constructor() {
+    this.state = {
+      task: ["Сделать домашку", "Сделать практику", "Пойти домой"],
+      inputText: "",
+      onclickPlus: false,
+    };
   }
 
   getDomNode() {
@@ -35,6 +46,19 @@ class Component {
 }
 
 class TodoList extends Component {
+  onAddTask = (e) => {
+    this.state.task.push(e);
+  }
+  onAddInputChange = () => {
+
+  }
+  createCheckBox = () => {
+    return this.state.task.map(e => createElement("li", {}, [
+      createElement("input", {type: "checkbox"}),
+      createElement("label", {}, e),
+      createElement("button", {}, "🗑️")
+    ]));
+  }
   render() {
     return createElement("div", { class: "todo-list" }, [
       createElement("h1", {}, "TODO List"),
@@ -46,23 +70,7 @@ class TodoList extends Component {
         }),
         createElement("button", { id: "add-btn" }, "+"),
       ]),
-      createElement("ul", { id: "todos" }, [
-        createElement("li", {}, [
-          createElement("input", { type: "checkbox" }),
-          createElement("label", {}, "Сделать домашку"),
-          createElement("button", {}, "🗑️")
-        ]),
-        createElement("li", {}, [
-          createElement("input", { type: "checkbox" }),
-          createElement("label", {}, "Сделать практику"),
-          createElement("button", {}, "🗑️")
-        ]),
-        createElement("li", {}, [
-          createElement("input", { type: "checkbox" }),
-          createElement("label", {}, "Пойти домой"),
-          createElement("button", {}, "🗑️")
-        ]),
-      ]),
+      createElement("ul", { id: "todos" }, this.createCheckBox()),
     ]);
   }
 }
